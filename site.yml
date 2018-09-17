@@ -1,0 +1,5 @@
+---
+- name: apply commn configuration to all nodes
+  hosts: all
+  roles:
+    - common

@@ -1,0 +1,73 @@
+---
+- name: yum remove erlang*
+  shell: yum remove erlang*
+  when: ansible_os_family == "RedHat"
+  tags: yum remove erlang*
+
+- name: yum install '{{ sort }}'
+  yum: name={{ item }} enablerepo=epel state=present
+  with_items:
+    - make
+    - gcc
+    - gcc-c++
+    - ncurses-devel
+    - openssl-devel
+  when: ansible_os_family == "RedHat"
+  tags: install sort
+
+- name: tar -xvf rabbitmq-server-generic-unix-3.6.9.tar.xz remote 
+  unarchive: src=files/rabbitmq-server-generic-unix-3.6.9.tar.xz dest=/tmp/
+  tags: tar -xvf rabbitmq-server-generic-unix-3.6.9.tar.xz
+
+- name: mv rabbitmq_server-3.6.9 /opt/
+  command: cp -r /tmp/rabbitmq_server-3.6.9 /opt/
+  tags: mv rabbitmq_server-3.6.9 /usr/local/
+
+- name: tar -xvf  otp_src_18.2.1.tar.gz /tmp/
+  unarchive: src=files/otp_src_18.2.1.tar.gz dest=/tmp/
+
+- name: prefix=/opt/erlang 
+  shell: cd /tmp/otp_src_18.2.1/ && ./configure --prefix=/opt/erlang && make && make install
+  tags: config erlang make make install 
+
+- name: setting profile 
+  copy: src=files/rabbitmq.sh dest=/etc/profile.d/ owner=root group=root mode=0644 backup=yes
+  tags: setting profile
+#  notify: 
+#    - source profile
+
+- name: source profile
+  shell: source /etc/profile
+  tags: source profile
+
+- name: rabbitmq-plugins enable rabbitmq_management
+  command: rabbitmq-plugins enable rabbitmq_management
+  tags: enable rabbitmq_management
+
+- name: rabbitmqctl start_app 
+  command: rabbitmqctl start_app
+  tags: rabbitmqctl start_app
+
+- name: rabbitmqctl delte all user
+  copy: src=files/delte_user.sh dest=/tmp/ owner=root group=root mode=0755 backup=yes
+  tags: delte_user
+
+- name: remove all user
+  command: /bin/bash /tmp/delte_user.sh
+  tags: remove all user
+
+- name: remove rm -rf /tmp/delte_user.sh
+  command: rm -rf /tmp/delte_user.sh
+  tags: remove rm -rf /tmp/delte_user.sh
+
+- name: remove delte /tmp/rabbitmq_server-3.6.9
+  command: rm -rf /tmp/rabbitmq_server-3.6.9
+  tags: remove delte /tmp/rabbitmq_server-3.6.9
+
+- name: rabbitmqctl add_user admin admin
+  command: rabbitmqctl add_user admin admin
+  tags: new admin
+
+- name: rabbitmqctl set_user_tags admin administrator
+  command: rabbitmqctl set_user_tags admin administrator
+  tags: setting admin
