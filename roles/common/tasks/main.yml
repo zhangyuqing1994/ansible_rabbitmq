@@ -1,35 +1,38 @@
 ---
-- name: yum remove erlang
-  shell: yum remove erlang* -y
-  when: ansible_os_family == "RedHat"
-  tags: remove_erlang
+#- name: yum remove erlang
+#  shell: yum remove erlang* -y
+#  when: ansible_os_family == "RedHat"
+#  tags: remove_erlang
+#
+#- name: yum install '{{ sort }}'
+#  yum: name={{ item }} enablerepo=epel state=present
+#  with_items:
+#    - make
+#    - gcc
+#    - gcc-c++
+#    - ncurses-devel
+#    - openssl-devel
+#  when: ansible_os_family == "RedHat"
+#  tags: install_sort
+#
+#- name: tar -xvf {{ rabbitmq_tar }}
+#  unarchive: src=files/{{ rabbitmq_tar }} dest=/tmp/
+#
+#- name: mv {{ rabbitmq_name }} /opt
+#  command: cp -r /tmp/{{ rabbitmq_name }} /opt/
+#
+#- name: tar -xvf  {{ otp_src_tar }} /tmp/
+#  unarchive: src=files/{{ otp_src_tar }} dest=/tmp/
+#
+#- name: prefix=/opt/erlang 
+#  shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
+#  tags: make_install
 
-- name: yum install '{{ sort }}'
-  yum: name={{ item }} enablerepo=epel state=present
-  with_items:
-    - make
-    - gcc
-    - gcc-c++
-    - ncurses-devel
-    - openssl-devel
-  when: ansible_os_family == "RedHat"
-  tags: install_sort
-
-- name: tar -xvf {{ rabbitmq_tar }}
-  unarchive: src=files/{{ rabbitmq_tar }} dest=/tmp/
-
-- name: mv {{ rabbitmq_name }} /opt
-  command: cp -r /tmp/{{ rabbitmq_name }} /opt/
-
-- name: tar -xvf  {{ otp_src_tar }} /tmp/
-  unarchive: src=files/{{ otp_src_tar }} dest=/tmp/
-
-- name: prefix=/opt/erlang 
-  shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
-  tags: make_install
+- name: .bash_profile
+  copy: src=files/.bash_profile dest=/root/.bash_profile owner=root group=root mode=0644 backup=yes
 
 - name: setting profile 
-  copy: src=files/rabbitmq.sh dest={{ profile_dir }} owner=root group=root mode=0644 backup=yes
+  copy: src=files/rabbitmq.sh dest={{ profile_dir }} owner=root group=root mode=0755 backup=yes
   tags: setting_profile
 #  notify: 
 #    - source profile
@@ -37,6 +40,9 @@
 - name: source {{ profile_dir }}/rabbitmq.sh
   shell: source {{ profile_dir }}/rabbitmq.sh
   tags: source_profile
+
+- name: rabbitmq-server > /dev/null
+  shell: rabbitmq-server &>/dev/null
 
 - name: rabbitmq-plugins enable rabbitmq_management
   command: rabbitmq-plugins enable rabbitmq_management
