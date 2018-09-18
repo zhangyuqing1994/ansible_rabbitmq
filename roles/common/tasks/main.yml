@@ -1,6 +1,6 @@
 ---
 - name: yum remove erlang
-  shell: yum remove erlang*
+  shell: yum remove erlang* -y
   when: ansible_os_family == "RedHat"
   tags: remove_erlang
 
