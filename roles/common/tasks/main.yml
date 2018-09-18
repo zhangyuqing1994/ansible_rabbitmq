@@ -1,8 +1,8 @@
----
+---`
 - name: yum remove erlang*
   shell: yum remove erlang*
   when: ansible_os_family == "RedHat"
-  tags: yum remove erlang*
+  tags: remove_erlang*
 
 - name: yum install '{{ sort }}'
   yum: name={{ item }} enablerepo=epel state=present
@@ -13,7 +13,7 @@
     - ncurses-devel
     - openssl-devel
   when: ansible_os_family == "RedHat"
-  tags: install sort
+  tags: install_sort
 
 - name: tar -xvf {{ rabbitmq_tar }}
   unarchive: src=files/{{ rabbitmq_tar }} dest=/tmp/
@@ -26,7 +26,7 @@
 
 - name: prefix=/opt/erlang 
   shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
-  tags: makeinstall
+  tags: make_install
 
 - name: setting profile 
   copy: src=files/rabbitmq.sh dest={{ profile_dir }} owner=root group=root mode=0644 backup=yes
@@ -34,17 +34,17 @@
 #  notify: 
 #    - source profile
 
-- name: source profile
-  shell: source /etc/profile
-  tags: source profile
+- name: source {{ profile_dir }}/rabbitmq.sh
+  shell: source {{ profile_dir }}/rabbitmq.sh
+  tags: source_profile
 
 - name: rabbitmq-plugins enable rabbitmq_management
   command: rabbitmq-plugins enable rabbitmq_management
-  tags: enable rabbitmq_management
+  tags: enable_rabbitmq_management
 
 - name: rabbitmqctl start_app 
   command: rabbitmqctl start_app
-  tags: rabbitmqctl start_app
+  tags: start_app
 
 - name: rabbitmqctl delte all user
   copy: src=files/delte_user.sh dest=/tmp/ owner=root group=root mode=0755 backup=yes
