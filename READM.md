@@ -18,6 +18,7 @@ ansible-playbook -i hosts site.yml --syntax-check
 ansible-playbook -i hosts  site.yml -f 10
 
 
+# 安装完后默认的用户密码为admin
 
 (1) 新增一个用户
 
