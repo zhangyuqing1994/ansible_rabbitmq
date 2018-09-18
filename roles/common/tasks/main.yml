@@ -15,24 +15,22 @@
   when: ansible_os_family == "RedHat"
   tags: install sort
 
-- name: tar -xvf rabbitmq-server-generic-unix-3.6.9.tar.xz remote 
-  unarchive: src=files/rabbitmq-server-generic-unix-3.6.9.tar.xz dest=/tmp/
-  tags: tar -xvf rabbitmq-server-generic-unix-3.6.9.tar.xz
+- name: tar -xvf {{ rabbitmq_tar }}
+  unarchive: src=files/{{ rabbitmq_tar }} dest=/tmp/
 
-- name: mv rabbitmq_server-3.6.9 /opt/
-  command: cp -r /tmp/rabbitmq_server-3.6.9 /opt/
-  tags: mv rabbitmq_server-3.6.9 /usr/local/
+- name: mv {{ rabbitmq_name }} /opt
+  command: cp -r /tmp/{{ rabbitmq_name }} /opt/
 
-- name: tar -xvf  otp_src_18.2.1.tar.gz /tmp/
-  unarchive: src=files/otp_src_18.2.1.tar.gz dest=/tmp/
+- name: tar -xvf  {{ otp_src_tar }} /tmp/
+  unarchive: src=files/{{ otp_src_tar }} dest=/tmp/
 
 - name: prefix=/opt/erlang 
-  shell: cd /tmp/otp_src_18.2.1/ && ./configure --prefix=/opt/erlang && make && make install
-  tags: config erlang make make install 
+  shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
+  tags: makeinstall
 
 - name: setting profile 
-  copy: src=files/rabbitmq.sh dest=/etc/profile.d/ owner=root group=root mode=0644 backup=yes
-  tags: setting profile
+  copy: src=files/rabbitmq.sh dest={{ profile_dir }} owner=root group=root mode=0644 backup=yes
+  tags: setting_profile
 #  notify: 
 #    - source profile
 
@@ -54,20 +52,20 @@
 
 - name: remove all user
   command: /bin/bash /tmp/delte_user.sh
-  tags: remove all user
+  tags: remove_all_user
 
 - name: remove rm -rf /tmp/delte_user.sh
   command: rm -rf /tmp/delte_user.sh
-  tags: remove rm -rf /tmp/delte_user.sh
+  tags: remove_delte_user.sh
 
-- name: remove delte /tmp/rabbitmq_server-3.6.9
-  command: rm -rf /tmp/rabbitmq_server-3.6.9
-  tags: remove delte /tmp/rabbitmq_server-3.6.9
+- name: remove delte /tmp/{{ rabbitmq_name }}
+  command: rm -rf /tmp/{{ rabbitmq_name }}
+  tags: remove_rabbitmq
 
-- name: rabbitmqctl add_user admin admin
-  command: rabbitmqctl add_user admin admin
-  tags: new admin
+- name: rabbitmqctl add_user {{ user_name }} {{ user_name }}
+  command: rabbitmqctl add_user {{ user_name }} {{ user_name }}
+  tags: new_user
 
-- name: rabbitmqctl set_user_tags admin administrator
-  command: rabbitmqctl set_user_tags admin administrator
-  tags: setting admin
+- name: rabbitmqctl set_user_tags {{ user_name }} administrator
+  command: rabbitmqctl set_user_tags {{user_name }} administrator
+  tags: setting_user

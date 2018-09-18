@@ -7,7 +7,7 @@
 
 https://www.aliyun.com/jiaocheng/133267.html
 
-# 安装前改host文件 远程执行机器IP  修改root用户密码
+# 安装前改host文件 远程执行机器IP root用户密码
 
 # 检测语法 
 

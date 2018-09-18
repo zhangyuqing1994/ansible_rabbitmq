@@ -2,3 +2,4 @@
 - name: source profile
   command: source {{ profile_dir }}/rabbitmq.sh
   tags: source profile
+

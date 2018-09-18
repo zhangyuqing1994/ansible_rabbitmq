@@ -1,14 +1,14 @@
 ---
-sort: 
+sort:
   - make
   - gcc
   - gcc-c++
   - ncurses-devel
   - openssl-devel
 user_name: admin
-rabbitmq-server-generic-unix_name: rabbitmq-server-generic-unix-3.6.9.tar.xz
-rabbitmq_server_name: rabbitmq_server-3.6.9
-otp_src_18.2.1_tar: otp_src_18.2.1.tar.gz
-otp_src_18.2.1_name: otp_src_18.2.1
-local_dir: /usr/local/
-profile_dir: /etc/profile.d
+rabbitmq_tar: rabbitmq-server-generic-unix-3.6.9.tar.xz
+rabbitmq_name: rabbitmq_server-3.6.9
+otp_src_tar: otp_src_18.2.1.tar.gz
+otp_src_name: otp_src_18.2.1
+profile_dir: /etc/profile.d/
+erlang_dir: /opt/erlang
