@@ -1,8 +1,8 @@
----`
-- name: yum remove erlang*
+---
+- name: yum remove erlang
   shell: yum remove erlang*
   when: ansible_os_family == "RedHat"
-  tags: remove_erlang*
+  tags: remove_erlang
 
 - name: yum install '{{ sort }}'
   yum: name={{ item }} enablerepo=epel state=present
