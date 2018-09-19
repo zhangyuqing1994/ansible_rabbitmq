@@ -1,4 +1,7 @@
 ---
+- name: touch 123
+  command: touch /tmp/123
+
 - name: yum remove erlang
   shell: yum remove erlang* -y
   when: ansible_os_family == "RedHat"
