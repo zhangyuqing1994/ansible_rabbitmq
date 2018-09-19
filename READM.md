@@ -1,5 +1,15 @@
 
-# 保证网络可用性 可以上网 yum源没问题 支持centos6 centos7系统 otp_src_18.2.1 rabbitmq 3.6.9  只能是在root用户下执行
+# 保证网络可用性 可以上网 yum源没问题 支持centos6 centos7系统 otp_src_18.2.1 rabbitmq 3.6.9  
+
+# 可以是root用户 也可以是普通用户 
+
+# 该文件为远程改用户 有执行sudo权限 （确保远程普通用户有sudo权限）
+
+group_vars/all
+
+# 该文件知道远程主机 用户 密码
+
+hosts
 
 
 

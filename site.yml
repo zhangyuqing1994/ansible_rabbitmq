@@ -1,5 +1,7 @@
 ---
 - name: apply commn configuration to all nodes
   hosts: all
+  remote_user: '{{ user }}'
+  sudo: yes
   roles:
     - common
