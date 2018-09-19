@@ -24,12 +24,12 @@
 - name: tar -xvf  {{ otp_src_tar }} /tmp/
   unarchive: src=files/{{ otp_src_tar }} dest=/tmp/
 
-- name: prefix=/opt/erlang 
-  shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
-  tags: make_install
+#- name: prefix=/opt/erlang 
+#  shell: cd /tmp/{{ otp_src_name }}  && ./configure --prefix={{ erlang_dir }} && make && make install
+#  tags: make_install
 
 - name: .bash_profile
-  copy: src=files/.bash_profile dest=/root/.bash_profile owner=root group=root mode=0644 backup=yes
+  copy: src=files/.bash_profile dest=~/.bash_profile owner=root group=root mode=0644 backup=yes
 
 - name: setting profile 
   copy: src=files/rabbitmq.sh dest={{ profile_dir }} owner=root group=root mode=0755 backup=yes
@@ -41,11 +41,26 @@
   shell: source {{ profile_dir }}/rabbitmq.sh
   tags: source_profile
 
-- name: rabbitmqctl stop
-  shell: rabbitmqctl stop &>/dev/null
+- name: remove {{ otp_src_tar }}
+  shell: rm -rf /tmp/{{ otp_src_tar }}
 
-- name: rabbitmq-server > /dev/null
-  shell: rabbitmq-server -detached &>/dev/null
+#- name: rabbitmqctl stop
+#  shell: rabbitmqctl stop &>/dev/null
+#  tags: stop
+
+#- name: rabbitmq-server > /dev/null
+#  shell: rabbitmq-server -detached &>/dev/null
+#  tags: start
+
+- name: copy files/start.sh
+  copy: src=files/start.sh dest=/tmp/ owner=root group=root mode=0755 backup=yes
+
+- name: bash start.sh
+  shell: /tmp/start.sh
+
+- name: remove start.sh
+  command: rm -rf /tmp/start.sh
+
 
 - name: rabbitmq-plugins enable rabbitmq_management
   command: rabbitmq-plugins enable rabbitmq_management
