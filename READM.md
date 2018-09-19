@@ -3,14 +3,12 @@
 
 # 可以是root用户 也可以是普通用户 
 
-# 安装前改hosts文件 配置远程主机 用户 密码 (确保用户有sudo 可执行权限)
-
 
 # 本文安装步骤参考链接
 
 https://www.aliyun.com/jiaocheng/133267.html
 
-# 安装前改host文件 远程执行机器IP root用户密码
+# 安装前改hosts文件 配置远程主机 用户 密码 (确保用户有sudo 可执行权限)
 
 # 检测语法 
 
